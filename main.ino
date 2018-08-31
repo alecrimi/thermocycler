@@ -224,26 +224,31 @@ void runPCR() {
   for (; cycles < NUM_CYCLES; cycles++) {
     CURRENT_CYCLE = cycles;
     unsigned long cycleStartTime = millis();
-    Serial.print("///CYCLE  ");
-    Serial.print(cycles);
+    lcd.setCursor(0, 0);
+    lcd.print("///CYCLE  ");
+    lcd.print(cycles);
       
     time = millis();
-    Serial.println("HEATING UP");
+    lcd.setCursor(0, 1);
+    lcd.print("HEATING UP");
     CURRENT_PHASE='H';
     if(!heatUp(DENATURE_TEMP)){
       // if unable to heat up, stop
-      Serial.println("Unable to heat up... something is wrong :(");
+      lcd.setCursor(0, 1);
+      lcd.print("Unable to heat up... something is wrong :(");
       cycles = NUM_CYCLES;
       break;
     }
     
     long dif = millis() - time;
-    Serial.print("***TOTAL HEAT TIME ");
-    Serial.println(dif);
-    Serial.println();
+    lcd.setCursor(0, 0);
+    lcd.print("***TOTAL HEAT TIME ");
+    lcd.print(dif);
+    //Serial.println();
    
     time = millis();
-    Serial.println("DENATURATION");
+    lcd.setCursor(0, 0);
+    lcd.print("DENATURATION");
     CURRENT_PHASE='D';
     if(cycles > 0) {
       holdConstantTemp(DENATURE_TIME, DENATURE_TEMP);
@@ -251,38 +256,43 @@ void runPCR() {
       // if this is the first cycles, hold denature temp for longer
       holdConstantTemp(INITIAL_DENATURE_TIME, DENATURE_TEMP);
     }
-    Serial.println();
-  
-    Serial.println("COOLING");
+   // Serial.println();
+   
+    lcd.setCursor(0, 0);
+    lcd.print("COOLING");
     time = millis();
     CURRENT_PHASE='C';
     coolDown((ANNEALING_TEMP));
     dif = millis()-time;
-    Serial.print("***TOTAL COOLING TIME ");
-    Serial.println(dif);
-    Serial.println();
+    lcd.setCursor(0, 1);
+    lcd.print("***TOTAL COOLING TIME ");
+    lcd.print(dif);
+    //Serial.println();
      
-    Serial.println("ANNEALING");
+    lcd.setCursor(0, 0);
+    lcd.print("ANNEALING");
     time = millis();
     CURRENT_PHASE='A';
     holdConstantTemp(ANNEALING_TIME, ANNEALING_TEMP);
     dif = millis()-time;
-    Serial.print("***TOTAL ANNEALING TIME ");
-    Serial.println(dif);
-    Serial.println();
+    lcd.setCursor(0, 1);
+    lcd.print("***TOTAL ANNEALING TIME ");
+    lcd.print(dif);
+  //  Serial.println();
     
-    
-    Serial.println("HEATING UP");
+    lcd.setCursor(0, 0);
+    lcd.print("HEATING UP");
     time =millis();
     CURRENT_PHASE='D';
     heatUp((EXTENSION_TEMP));
     dif = millis()-time;
-    Serial.print("***TOTAL HEAT UP TIME IS ");
-    Serial.println(dif);
-    Serial.println();
+    lcd.setCursor(0, 1);
+    lcd.print("***TOTAL HEAT UP TIME IS ");
+    lcd.print(dif);
+   // Serial.println();
   
-     
-    Serial.println("EXTENSION");
+    lcd.setCursor(0, 0);
+    lcd.print("EXTENSION");
     time = millis();
     CURRENT_PHASE='E';
     if (cycles<(NUM_CYCLES-1)) {
@@ -292,17 +302,19 @@ void runPCR() {
        holdConstantTemp(FINAL_EXTENSION_TIME, EXTENSION_TEMP);
     }
     dif = millis()-time;
-    Serial.print("***TOTAL EXTENSION TIME IS ");
-    Serial.println(dif);
-    Serial.println();
-    Serial.println();
+    lcd.setCursor(0, 1);
+    lcd.print("***TOTAL EXTENSION TIME IS ");
+    lcd.print(dif);
+    //Serial.println();
+    //Serial.println();
     
-    Serial.print("///TOTAL CYCLE TIME: ");
-    Serial.println(millis()-cycleStartTime);
-    Serial.println();
+    lcd.setCursor(0, 0);
+    lcd.print("///TOTAL CYCLE TIME: ");
+    lcd.print(millis()-cycleStartTime);
+   // Serial.println();
 } 
-    
-  Serial.println("DONE");
+  lcd.setCursor(0, 1);
+  lcd.print("DONE, Yaw loves you");
 }
 
 
@@ -327,11 +339,11 @@ void setup() {
  lcd.print("Starting in");
  
  //Serial.println("Starting in");
- lcd.setCursor(0, 1);
+ //lcd.setCursor(0, 1);
  for (int i = 5; i > 0; i--) {
-    lcd.print((i);
-    lcd.print(("... ");
    
+   lcd.print("... ");
+   lcd.print(i);
    delay(1000);
  }
  //Serial.println();
