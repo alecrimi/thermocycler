@@ -54,10 +54,8 @@ int thermoCS = A2;//5;
 int thermoCLK = A1;//6;
 MAX6675 thermocouple(thermoCLK, thermoCS, thermoDO);
 
-
 int fanPin = A4;//9; // pin for controling the fan
  
-
 //safety vars
 short ROOM_TEMP = 18; // if initial temp is below this, we assume thermocouple is diconnected or not working
 short MAX_ALLOWED_TEMP = 100; // we never go above 100C
@@ -311,12 +309,10 @@ void runPCR() {
 /* Set up all pins */
 void setup() {
   
-   // set up the LCD's number of columns and rows:
-  lcd.begin(16, 2);
-  // Print a message to the LCD.
-  lcd.print("Cycle");
-  
- Serial.begin(9600);  
+ // set up the LCD's number of columns and rows:
+ lcd.begin(16, 2);
+ // Print a message to the LCD.
+ //Serial.begin(9600);  
  
  pinMode(heatPin, OUTPUT); 
  digitalWrite(heatPin, LOW);  
@@ -324,28 +320,27 @@ void setup() {
  digitalWrite(fanPin, LOW);
  
  // time out for 5 seconds
-   // set the cursor to column 0, line 1
-  // (note: line 1 is the second row, since counting begins with 0):
-  lcd.setCursor(0, 1);
-  // print the number of seconds since reset:
-  lcd.print("Starting in");
+  // set the cursor to column 0, line 1
+ // (note: line 1 is the second row, since counting begins with 0):
+ //lcd.setCursor(0, 1);
+ // print the number of seconds since reset:
+ lcd.print("Starting in");
  
- /*Serial.println("Starting in");
+ //Serial.println("Starting in");
+ lcd.setCursor(0, 1);
  for (int i = 5; i > 0; i--) {
-   Serial.print(i);
-   Serial.print("... ");
+    lcd.print((i);
+    lcd.print(("... ");
    
    delay(1000);
- }*/
- Serial.println();
+ }
+ //Serial.println();
  runPCR();
 }
 
 
 
 
-void loop() {
-  
-      
+void loop() {     
  //nothing
 }
