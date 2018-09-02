@@ -225,7 +225,7 @@ void runPCR() {
     CURRENT_CYCLE = cycles;
     unsigned long cycleStartTime = millis();
     lcd.setCursor(0, 0);
-    lcd.print("///CYCLE  ");
+    lcd.print("CYCLE  ");
     lcd.print(cycles);
       
     time = millis();
@@ -336,16 +336,15 @@ void setup() {
  // (note: line 1 is the second row, since counting begins with 0):
  //lcd.setCursor(0, 1);
  // print the number of seconds since reset:
- lcd.print("Starting in");
+ lcd.print("Starting in"); 
  
  //Serial.println("Starting in");
- //lcd.setCursor(0, 1);
+ /*lcd.setCursor(0, 1);
  for (int i = 5; i > 0; i--) {
-   
    lcd.print("... ");
    lcd.print(i);
    delay(1000);
- }
+ }*/
  //Serial.println();
  runPCR();
 }
