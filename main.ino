@@ -70,7 +70,18 @@ char CURRENT_PHASE='H';
 
 unsigned long time;  // used to track how long program is running
 double curTemp; // current temperature
-
+ 
+void startupMenu() {
+      lcd.print("Standard program"); 
+      lcd.setCursor(0, 1);
+      lcd.print("*=YES #=NO"); 
+      char key = keypad.getKey();
+      while( key != '*'  &&  key != '#' )
+      {
+      key = keypad.getKey(); //UPDATE VALUE 
+    }
+      lcd.clear();
+}
 
 /* Print out current phase, temperature, how long it's been running, etc
 startTime -> when specific phase started running in ms
@@ -337,7 +348,6 @@ void setup() {
  //lcd.setCursor(0, 1);
  // print the number of seconds since reset:
  lcd.print("Starting in"); 
- 
  //Serial.println("Starting in");
  for (int i = 5; i > 0; i--) {
    lcd.setCursor(0, 1);
@@ -346,6 +356,8 @@ void setup() {
    delay(1000);
  }
  lcd.clear();
+ 
+ startupMenu(); 
  //Serial.println();
  runPCR();
 }
