@@ -339,12 +339,13 @@ void setup() {
  lcd.print("Starting in"); 
  
  //Serial.println("Starting in");
- /*lcd.setCursor(0, 1);
  for (int i = 5; i > 0; i--) {
+   lcd.setCursor(0, 1);
    lcd.print("... ");
    lcd.print(i);
    delay(1000);
- }*/
+ }
+ lcd.clear();
  //Serial.println();
  runPCR();
 }
