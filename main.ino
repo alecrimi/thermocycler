@@ -87,82 +87,142 @@ void startupMenu() {
 }
 
 void customProgram() {
-     int  = 32;  
+
+     lcd.setCursor(0, 0);
+     lcd.print("Insert only "); 
+     lcd.setCursor(0, 1);
+     lcd.print("numeric values"); 
+     delay(1000);
+  
      // Select number of cycle
+     lcd.setCursor(0, 0);
+     lcd.print("Number of cycles"); 
      lcd.setCursor(0, 1);
-     lcd.print("Insert number "); 
-     lcd.setCursor(0, 1);
-     lcd.print("of cycles"); 
-     char key = keypad.getKey();
-     while( key != '*'  &&  key != '#' )
+     lcd.print("2 digits: "); 
+     int key  = keypad.getKey();
+     int key2 = keypad.getKey();
+     int key3  = keypad.getKey();
+     int key4  = keypad.getKey();
+     int key5 = keypad.getKey();
+     while( key == NO_KEY )
           { key = keypad.getKey(); //UPDATE VALUE  }
-     NUM_CYCLES = key;
+     lcd.print(key);
+     while( key2 == NO_KEY )
+          { key2 = keypad.getKey(); //UPDATE VALUE  }
+     lcd.print(key2);
+     NUM_CYCLES = key*10+key2;
+     delay(1000);
      lcd.clear();
            
      // Select DENATURE_TEMP
+     lcd.setCursor(0, 0);
+     lcd.print("Denature temp. "); 
      lcd.setCursor(0, 1);
-     lcd.print("Insert denature "); 
-     lcd.setCursor(0, 1);
-     lcd.print("temp. in celcius"); 
-     char key = keypad.getKey();
-     while( key != '*'  &&  key != '#' )
+     lcd.print("in celcius: "); 
+     while( key == NO_KEY )
           { key = keypad.getKey(); //UPDATE VALUE  }
-     DENATURE_TEMP = key;
+     lcd.print(key);
+     while( key2 == NO_KEY )
+          { key2 = keypad.getKey(); //UPDATE VALUE  }
+     lcd.print(key2);
+     DENATURE_TEMP = key*10+key2;
      lcd.clear();
               
      // Select ANNEALING_TEMP
+     lcd.setCursor(0, 0);
+     lcd.print("Annealing temp."); 
      lcd.setCursor(0, 1);
-     lcd.print("Insert annealing "); 
-     lcd.setCursor(0, 1);
-     lcd.print("temp. in celcius"); 
-     char key = keypad.getKey();
-     while( key != '*'  &&  key != '#' )
+     lcd.print("in celcius: "); 
+     while( key == NO_KEY )
           { key = keypad.getKey(); //UPDATE VALUE  }
-     ANNEALING_TEMP = key;
+     lcd.print(key);
+     while( key2 == NO_KEY )
+          { key2 = keypad.getKey(); //UPDATE VALUE  }
+     lcd.print(key2);
+     ANNEALING_TEMP = key*10+key2;
      lcd.clear();
             
      // Select EXTENSION_TEMP
+     lcd.setCursor(0, 0);
+     lcd.print("Extension temp."); 
      lcd.setCursor(0, 1);
-     lcd.print("Insert extension "); 
-     lcd.setCursor(0, 1);
-     lcd.print("temp. in celcius"); 
-     char key = keypad.getKey();
-     while( key != '*'  &&  key != '#' )
+     lcd.print("in celcius: "); 
+     while( key == NO_KEY )
           { key = keypad.getKey(); //UPDATE VALUE  }
-     EXTENSION_TEMP = key;
+     lcd.print(key);
+     while( key2 == NO_KEY )
+          { key2 = keypad.getKey(); //UPDATE VALUE  }
+     lcd.print(key2);
+     EXTENSION_TEMP = key*10+key2;
      lcd.clear(); 
            
      // Select DENATURE_TIME
+     lcd.setCursor(0, 0);
+     lcd.print("Denature time"); 
      lcd.setCursor(0, 1);
-     lcd.print("Insert denature "); 
-     lcd.setCursor(0, 1);
-     lcd.print("time in ms"); 
-     char key = keypad.getKey();
-     while( key != '*'  &&  key != '#' )
+     lcd.print("in ms: "); 
+     while( key == NO_KEY )
           { key = keypad.getKey(); //UPDATE VALUE  }
-     DENATURE_TIME = key;
+     lcd.print(key);
+     while( key2 == NO_KEY )
+          { key2 = keypad.getKey(); //UPDATE VALUE  }
+     lcd.print(key2);
+     while( key3 == NO_KEY )
+          { key3 = keypad.getKey(); //UPDATE VALUE  }
+     lcd.print(key3);
+     while( key4 == NO_KEY )
+          { key4 = keypad.getKey(); //UPDATE VALUE  }
+     lcd.print(key5);
+     while( key5 == NO_KEY )
+          { key5 = keypad.getKey(); //UPDATE VALUE  }
+     lcd.print(key5);
+     DENATURE_TIME = key*10000+key2*1000+key3*100+key4*10+key5;
      lcd.clear(); 
            
      // Select ANNEALING_TIME
-     lcd.setCursor(0, 1);
+     lcd.setCursor(0, 0);
      lcd.print("Insert annealing "); 
      lcd.setCursor(0, 1);
      lcd.print("time in ms"); 
-     char key = keypad.getKey();
-     while( key != '*'  &&  key != '#' )
+     while( key == NO_KEY )
           { key = keypad.getKey(); //UPDATE VALUE  }
-     ANNEALING_TIME = key;
+     lcd.print(key);
+     while( key2 == NO_KEY )
+          { key2 = keypad.getKey(); //UPDATE VALUE  }
+     lcd.print(key2);
+     while( key3 == NO_KEY )
+          { key3 = keypad.getKey(); //UPDATE VALUE  }
+     lcd.print(key3);
+     while( key4 == NO_KEY )
+          { key4 = keypad.getKey(); //UPDATE VALUE  }
+     lcd.print(key5);
+     while( key5 == NO_KEY )
+          { key5 = keypad.getKey(); //UPDATE VALUE  }
+     lcd.print(key5);
+     ANNEALING_TIME = key*10000+key2*1000+key3*100+key4*10+key5;
      lcd.clear(); 
            
      // Select EXTENSION_TIME
-     lcd.setCursor(0, 1);
+     lcd.setCursor(0, 0);
      lcd.print("Insert extension "); 
      lcd.setCursor(0, 1);
      lcd.print("time in ms"); 
-     char key = keypad.getKey();
-     while( key != '*'  &&  key != '#' )
+     while( key == NO_KEY )
           { key = keypad.getKey(); //UPDATE VALUE  }
-     EXTENSION_TIME = key;
+     lcd.print(key);
+     while( key2 == NO_KEY )
+          { key2 = keypad.getKey(); //UPDATE VALUE  }
+     lcd.print(key2);
+     while( key3 == NO_KEY )
+          { key3 = keypad.getKey(); //UPDATE VALUE  }
+     lcd.print(key3);
+     while( key4 == NO_KEY )
+          { key4 = keypad.getKey(); //UPDATE VALUE  }
+     lcd.print(key5);
+     while( key5 == NO_KEY )
+          { key5 = keypad.getKey(); //UPDATE VALUE  }
+     lcd.print(key5);
+     EXTENSION_TIME = key*10000+key2*1000+key3*100+key4*10+key5;
      lcd.clear(); 
              
 }
