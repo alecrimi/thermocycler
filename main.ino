@@ -20,10 +20,8 @@ byte rowPins[ROWS] = {8, 7, 6, 5}; //connect to the row pinouts of the keypad
 byte colPins[COLS] = {4, 3, 2}; //connect to the column pinouts of the keypad
 
 Keypad keypad = Keypad( makeKeymap(keys), rowPins, colPins, ROWS, COLS ); 
- 
- 
+  
 int cycles = 0;
-
  
 /* PCR VARIABLES*/
 double DENATURE_TEMP = 94;
@@ -81,6 +79,92 @@ void startupMenu() {
       key = keypad.getKey(); //UPDATE VALUE 
     }
       lcd.clear();
+  
+      if( key != '#')
+      {
+         customProgram();
+      } 
+}
+
+void customProgram() {
+     int  = 32;  
+     // Select number of cycle
+     lcd.setCursor(0, 1);
+     lcd.print("Insert number "); 
+     lcd.setCursor(0, 1);
+     lcd.print("of cycles"); 
+     char key = keypad.getKey();
+     while( key != '*'  &&  key != '#' )
+          { key = keypad.getKey(); //UPDATE VALUE  }
+     NUM_CYCLES = key;
+     lcd.clear();
+           
+     // Select DENATURE_TEMP
+     lcd.setCursor(0, 1);
+     lcd.print("Insert denature "); 
+     lcd.setCursor(0, 1);
+     lcd.print("temp. in celcius"); 
+     char key = keypad.getKey();
+     while( key != '*'  &&  key != '#' )
+          { key = keypad.getKey(); //UPDATE VALUE  }
+     DENATURE_TEMP = key;
+     lcd.clear();
+              
+     // Select ANNEALING_TEMP
+     lcd.setCursor(0, 1);
+     lcd.print("Insert annealing "); 
+     lcd.setCursor(0, 1);
+     lcd.print("temp. in celcius"); 
+     char key = keypad.getKey();
+     while( key != '*'  &&  key != '#' )
+          { key = keypad.getKey(); //UPDATE VALUE  }
+     ANNEALING_TEMP = key;
+     lcd.clear();
+            
+     // Select EXTENSION_TEMP
+     lcd.setCursor(0, 1);
+     lcd.print("Insert extension "); 
+     lcd.setCursor(0, 1);
+     lcd.print("temp. in celcius"); 
+     char key = keypad.getKey();
+     while( key != '*'  &&  key != '#' )
+          { key = keypad.getKey(); //UPDATE VALUE  }
+     EXTENSION_TEMP = key;
+     lcd.clear(); 
+           
+     // Select DENATURE_TIME
+     lcd.setCursor(0, 1);
+     lcd.print("Insert denature "); 
+     lcd.setCursor(0, 1);
+     lcd.print("time in ms"); 
+     char key = keypad.getKey();
+     while( key != '*'  &&  key != '#' )
+          { key = keypad.getKey(); //UPDATE VALUE  }
+     DENATURE_TIME = key;
+     lcd.clear(); 
+           
+     // Select ANNEALING_TIME
+     lcd.setCursor(0, 1);
+     lcd.print("Insert annealing "); 
+     lcd.setCursor(0, 1);
+     lcd.print("time in ms"); 
+     char key = keypad.getKey();
+     while( key != '*'  &&  key != '#' )
+          { key = keypad.getKey(); //UPDATE VALUE  }
+     ANNEALING_TIME = key;
+     lcd.clear(); 
+           
+     // Select EXTENSION_TIME
+     lcd.setCursor(0, 1);
+     lcd.print("Insert extension "); 
+     lcd.setCursor(0, 1);
+     lcd.print("time in ms"); 
+     char key = keypad.getKey();
+     while( key != '*'  &&  key != '#' )
+          { key = keypad.getKey(); //UPDATE VALUE  }
+     EXTENSION_TIME = key;
+     lcd.clear(); 
+             
 }
 
 /* Print out current phase, temperature, how long it's been running, etc
@@ -89,16 +173,16 @@ startTime -> when specific phase started running in ms
 void printTempStats(unsigned long startTime) {
   
    unsigned long timeElapsed = millis() - startTime;
-   Serial.print("CCL:");
-   Serial.print(CURRENT_CYCLE);
-   Serial.print(" PHS:");
-   Serial.print(CURRENT_PHASE);
-   Serial.print(" ET:");
-   Serial.print(timeElapsed);
-   Serial.print(" TT:");
-   Serial.print(millis());
-   Serial.print(" TMP:");
-   Serial.println(curTemp);
+   lcd.print("CCL:");
+   lcd.print(CURRENT_CYCLE);
+   lcd.print(" PHS:");
+   lcd.print(CURRENT_PHASE);
+   lcd.print(" ET:");
+   lcd.print(timeElapsed);
+   lcd.print(" TT:");
+   lcd.print(millis());
+   lcd.print(" TMP:");
+   lcd.println(curTemp);
 }
 
 /* Heat up to the desired temperature.
@@ -110,8 +194,8 @@ boolean heatUp(double maxTemp, boolean printTemps = true){
   double prevTemp = thermocouple.readCelsius();
   curTemp = thermocouple.readCelsius();
   if (curTemp < ROOM_TEMP) {
-   Serial.println("STARTING TMP TOO LOW");
-   Serial.println(prevTemp);
+   lcd.println("STARTING TMP TOO LOW");
+   lcd.println(prevTemp);
    return false;
   }
   int curIteration = 0;
@@ -147,10 +231,10 @@ boolean heatUp(double maxTemp, boolean printTemps = true){
      
    if ((curIteration%2) == 0) {
     if(curTemp < (prevTemp-1.25)) {
-      Serial.print("Temperature is not increasing... ");
-      Serial.print(curTemp);
-      Serial.print("   ");
-      Serial.println(prevTemp);
+      lcd.print("Temperature is not increasing... ");
+      lcd.print(curTemp);
+      lcd.print("   ");
+      lcd.println(prevTemp);
       return false; 
     }
    } else {   
@@ -159,16 +243,16 @@ boolean heatUp(double maxTemp, boolean printTemps = true){
      
    while ((curTemp-prevTemp) >= MAX_HEAT_INCREASE) {
      prevTemp = curTemp;
-     Serial.print("HEATING UP TOO FAST! ");
+     lcd.print("HEATING UP TOO FAST! ");
      delay(1000);
      curTemp = thermocouple.readCelsius();
-     Serial.println(curTemp);
+     lcd.println(curTemp);
    }
    
    while(curTemp >= MAX_ALLOWED_TEMP) {
      delay(1000);
-     Serial.print("OVERHEATING");
-     Serial.println(curTemp);
+     lcd.print("OVERHEATING");
+     lcd.println(curTemp);
    }
    
   } 
