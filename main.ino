@@ -109,10 +109,10 @@ void customProgram() {
      int key4  = keypad.getKey();
      int key5 = keypad.getKey();
      while( key == NO_KEY )
-          { key = keypad.getKey(); //UPDATE VALUE  }
+          { key = keypad.getKey();  }
      lcd.print(key);
      while( key2 == NO_KEY )
-          { key2 = keypad.getKey(); //UPDATE VALUE  }
+          { key2 = keypad.getKey();    }
      lcd.print(key2);
      NUM_CYCLES = key*10+key2;
      delay(1000);
@@ -124,10 +124,10 @@ void customProgram() {
      lcd.setCursor(0, 1);
      lcd.print("in celcius: "); 
      while( key == NO_KEY )
-          { key = keypad.getKey(); //UPDATE VALUE  }
+          { key = keypad.getKey();    }
      lcd.print(key);
      while( key2 == NO_KEY )
-          { key2 = keypad.getKey(); //UPDATE VALUE  }
+          { key2 = keypad.getKey();   }
      lcd.print(key2);
      DENATURE_TEMP = key*10+key2;
      lcd.clear();
@@ -138,10 +138,10 @@ void customProgram() {
      lcd.setCursor(0, 1);
      lcd.print("in celcius: "); 
      while( key == NO_KEY )
-          { key = keypad.getKey(); //UPDATE VALUE  }
+          { key = keypad.getKey();    }
      lcd.print(key);
      while( key2 == NO_KEY )
-          { key2 = keypad.getKey(); //UPDATE VALUE  }
+          { key2 = keypad.getKey();    }
      lcd.print(key2);
      ANNEALING_TEMP = key*10+key2;
      lcd.clear();
@@ -152,10 +152,10 @@ void customProgram() {
      lcd.setCursor(0, 1);
      lcd.print("in celcius: "); 
      while( key == NO_KEY )
-          { key = keypad.getKey(); //UPDATE VALUE  }
+          { key = keypad.getKey();  }
      lcd.print(key);
      while( key2 == NO_KEY )
-          { key2 = keypad.getKey(); //UPDATE VALUE  }
+          { key2 = keypad.getKey();    }
      lcd.print(key2);
      EXTENSION_TEMP = key*10+key2;
      lcd.clear(); 
@@ -166,19 +166,19 @@ void customProgram() {
      lcd.setCursor(0, 1);
      lcd.print("in ms: "); 
      while( key == NO_KEY )
-          { key = keypad.getKey(); //UPDATE VALUE  }
+          { key = keypad.getKey();    }
      lcd.print(key);
      while( key2 == NO_KEY )
-          { key2 = keypad.getKey(); //UPDATE VALUE  }
+          { key2 = keypad.getKey();    }
      lcd.print(key2);
      while( key3 == NO_KEY )
-          { key3 = keypad.getKey(); //UPDATE VALUE  }
+          { key3 = keypad.getKey();    }
      lcd.print(key3);
      while( key4 == NO_KEY )
-          { key4 = keypad.getKey(); //UPDATE VALUE  }
+          { key4 = keypad.getKey();    }
      lcd.print(key5);
      while( key5 == NO_KEY )
-          { key5 = keypad.getKey(); //UPDATE VALUE  }
+          { key5 = keypad.getKey();    }
      lcd.print(key5);
      DENATURE_TIME = key*10000+key2*1000+key3*100+key4*10+key5;
      lcd.clear(); 
@@ -189,19 +189,19 @@ void customProgram() {
      lcd.setCursor(0, 1);
      lcd.print("time in ms"); 
      while( key == NO_KEY )
-          { key = keypad.getKey(); //UPDATE VALUE  }
+          { key = keypad.getKey();    }
      lcd.print(key);
      while( key2 == NO_KEY )
-          { key2 = keypad.getKey(); //UPDATE VALUE  }
+          { key2 = keypad.getKey();   }
      lcd.print(key2);
      while( key3 == NO_KEY )
-          { key3 = keypad.getKey(); //UPDATE VALUE  }
+          { key3 = keypad.getKey();   }
      lcd.print(key3);
      while( key4 == NO_KEY )
-          { key4 = keypad.getKey(); //UPDATE VALUE  }
+          { key4 = keypad.getKey();   }
      lcd.print(key5);
      while( key5 == NO_KEY )
-          { key5 = keypad.getKey(); //UPDATE VALUE  }
+          { key5 = keypad.getKey();   }
      lcd.print(key5);
      ANNEALING_TIME = key*10000+key2*1000+key3*100+key4*10+key5;
      lcd.clear(); 
@@ -212,19 +212,19 @@ void customProgram() {
      lcd.setCursor(0, 1);
      lcd.print("time in ms"); 
      while( key == NO_KEY )
-          { key = keypad.getKey(); //UPDATE VALUE  }
+          { key = keypad.getKey();    }
      lcd.print(key);
      while( key2 == NO_KEY )
-          { key2 = keypad.getKey(); //UPDATE VALUE  }
+          { key2 = keypad.getKey();    }
      lcd.print(key2);
      while( key3 == NO_KEY )
-          { key3 = keypad.getKey(); //UPDATE VALUE  }
+          { key3 = keypad.getKey();    }
      lcd.print(key3);
      while( key4 == NO_KEY )
-          { key4 = keypad.getKey(); //UPDATE VALUE  }
+          { key4 = keypad.getKey();    }
      lcd.print(key5);
      while( key5 == NO_KEY )
-          { key5 = keypad.getKey(); //UPDATE VALUE  }
+          { key5 = keypad.getKey();    }
      lcd.print(key5);
      EXTENSION_TIME = key*10000+key2*1000+key3*100+key4*10+key5;
      lcd.clear(); 
@@ -510,10 +510,7 @@ void setup() {
  //Serial.println();
  runPCR();
 }
-
-
-
-
+ 
 void loop() {     
  //nothing
 }
