@@ -84,7 +84,7 @@ void startupMenu() {
     }
       lcd.clear();
   
-      if( key != '#')
+      if( key != '*')
       {
          customProgram();
       } 
@@ -96,7 +96,7 @@ void customProgram() {
      lcd.print("Insert only "); 
      lcd.setCursor(0, 1);
      lcd.print("numeric values"); 
-     delay(1000);
+     delay(2500);
   
      // Select number of cycle
      lcd.setCursor(0, 0);
@@ -110,9 +110,11 @@ void customProgram() {
      int key5 = keypad.getKey();
      while( key == NO_KEY )
           { key = keypad.getKey();  }
+     key = key -48;  
      lcd.print(key);
      while( key2 == NO_KEY )
           { key2 = keypad.getKey();    }
+     key2 = key2 -48; 
      lcd.print(key2);
      NUM_CYCLES = key*10+key2;
      delay(1000);
