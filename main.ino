@@ -1,12 +1,16 @@
 #include "max6675.h"
-#include <LiquidCrystal.h>
+//#include <LiquidCrystal.h>
+#include <Wire.h> 
+#include <LiquidCrystal_I2C.h>
 #include <Keypad.h>
 
 /* Display and keyboard */
 // initialize the library by associating any needed LCD interface pin
 // with the arduino pin number it is connected to
-const int rs = A0, en = 13, d4 = 12, d5 = 11, d6 = 10, d7 = 9;
-LiquidCrystal lcd(rs, en, d4, d5, d6, d7);
+//const int rs = A0, en = 13, d4 = 12, d5 = 11, d6 = 10, d7 = 9;
+//LiquidCrystal lcd(rs, en, d4, d5, d6, d7);
+LiquidCrystal_I2C lcd(0x27, 2, 1, 0, 4, 5, 6, 7, 3, POSITIVE); // 
+
 
 const byte ROWS = 4; //four rows
 const byte COLS = 3; //three columns
@@ -16,8 +20,8 @@ char keys[ROWS][COLS] = {
   {'7','8','9'},
   {'*','0','#'}
 };
-byte rowPins[ROWS] = {8, 7, 6, 5}; //connect to the row pinouts of the keypad
-byte colPins[COLS] = {4, 3, 2}; //connect to the column pinouts of the keypad
+byte rowPins[ROWS] = {10, 9, 8, 7}; //connect to the row pinouts of the keypad
+byte colPins[COLS] = {6, 5, 4}; //connect to the column pinouts of the keypad
 
 Keypad keypad = Keypad( makeKeymap(keys), rowPins, colPins, ROWS, COLS ); 
   
@@ -478,6 +482,7 @@ void setup() {
   
  // set up the LCD's number of columns and rows:
  lcd.begin(16, 2);
+ lcd.backlight();//Power on the back light
  // Print a message to the LCD.
  //Serial.begin(9600);  
  
