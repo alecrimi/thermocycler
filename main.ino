@@ -90,163 +90,138 @@ void startupMenu() {
       } 
 }
 
+int readVal()
+{  
+   int key  = keypad.getKey();
+   int key2 = keypad.getKey();
+   while( key == NO_KEY )
+   { key = keypad.getKey() ;  }
+   key = key -48;
+   lcd.print(key);
+   while( key2 == NO_KEY )
+   { key2 = keypad.getKey();    }
+   key2 = key2 -48;
+   lcd.print(key2);   
+   return key*10+key2;
+}
+
 void customProgram() {
 
      lcd.setCursor(0, 0);
      lcd.print("Insert only "); 
      lcd.setCursor(0, 1);
      lcd.print("numeric values"); 
-     delay(2500);
+     delay(2000);
+     lcd.clear();
   
      // Select number of cycle
      lcd.setCursor(0, 0);
      lcd.print("Number of cycles"); 
      lcd.setCursor(0, 1);
      lcd.print("2 digits: "); 
-     int key  = keypad.getKey();
-     int key2 = keypad.getKey();
-     int key3  = keypad.getKey();
-     int key4  = keypad.getKey();
-     int key5 = keypad.getKey();
-     while( key == NO_KEY )
-          { key = keypad.getKey();  }
-     key = key -48;  
-     lcd.print(key);
-     while( key2 == NO_KEY )
-          { key2 = keypad.getKey();    }
-     key2 = key2 -48; 
-     lcd.print(key2);
-     NUM_CYCLES = key*10+key2;
-     delay(1000);
+     NUM_CYCLES =   readVal();
+     delay(2000);
      lcd.clear();
-           
+     
      // Select DENATURE_TEMP
      lcd.setCursor(0, 0);
      lcd.print("Denature temp. "); 
      lcd.setCursor(0, 1);
-     lcd.print("in celcius: "); 
-     while( key == NO_KEY )
-          { key = keypad.getKey();    }
-     lcd.print(key);
-     while( key2 == NO_KEY )
-          { key2 = keypad.getKey();   }
-     lcd.print(key2);
-     DENATURE_TEMP = key*10+key2;
+     lcd.print("in celcius: ");
+     DENATURE_TEMP = readVal();
+     delay(2000);
      lcd.clear();
-              
+                   
      // Select ANNEALING_TEMP
      lcd.setCursor(0, 0);
      lcd.print("Annealing temp."); 
      lcd.setCursor(0, 1);
      lcd.print("in celcius: "); 
-     while( key == NO_KEY )
-          { key = keypad.getKey();    }
-     lcd.print(key);
-     while( key2 == NO_KEY )
-          { key2 = keypad.getKey();    }
-     lcd.print(key2);
-     ANNEALING_TEMP = key*10+key2;
-     lcd.clear();
-            
+     ANNEALING_TEMP =  readVal(); 
+     delay(2000);
+     lcd.clear(); 
+     
      // Select EXTENSION_TEMP
      lcd.setCursor(0, 0);
      lcd.print("Extension temp."); 
      lcd.setCursor(0, 1);
      lcd.print("in celcius: "); 
-     while( key == NO_KEY )
-          { key = keypad.getKey();  }
-     lcd.print(key);
-     while( key2 == NO_KEY )
-          { key2 = keypad.getKey();    }
-     lcd.print(key2);
-     EXTENSION_TEMP = key*10+key2;
+     EXTENSION_TEMP =   readVal(); 
+     delay(2000);
      lcd.clear(); 
            
+     lcd.setCursor(0, 0);
+     lcd.print("Now insert "); 
+     lcd.setCursor(0, 1);
+     lcd.print("always 5 digits:"); 
+     delay(3000);
+     lcd.clear(); 
+     
      // Select DENATURE_TIME
      lcd.setCursor(0, 0);
      lcd.print("Denature time"); 
      lcd.setCursor(0, 1);
-     lcd.print("in ms: "); 
+     lcd.print("in ms "); 
+     int key =  keypad.getKey(); 
      while( key == NO_KEY )
           { key = keypad.getKey();    }
+     key = key -48;
      lcd.print(key);
-     while( key2 == NO_KEY )
-          { key2 = keypad.getKey();    }
-     lcd.print(key2);
-     while( key3 == NO_KEY )
-          { key3 = keypad.getKey();    }
-     lcd.print(key3);
-     while( key4 == NO_KEY )
-          { key4 = keypad.getKey();    }
-     lcd.print(key5);
-     while( key5 == NO_KEY )
-          { key5 = keypad.getKey();    }
-     lcd.print(key5);
-     DENATURE_TIME = key*10000+key2*1000+key3*100+key4*10+key5;
-     lcd.clear(); 
-           
+     int first =  readVal(); 
+     int second = readVal(); 
+     DENATURE_TIME = key*10000+first*100+second;
+     delay(2000);
+     lcd.clear();  
+ 
      // Select ANNEALING_TIME
      lcd.setCursor(0, 0);
      lcd.print("Insert annealing "); 
      lcd.setCursor(0, 1);
-     lcd.print("time in ms"); 
-     while( key == NO_KEY )
-          { key = keypad.getKey();    }
-     lcd.print(key);
+     lcd.print("time in ms "); 
+     int key2 = keypad.getKey(); 
      while( key2 == NO_KEY )
-          { key2 = keypad.getKey();   }
+          { key2 = keypad.getKey();    }
+     key2 = key2 -48;
      lcd.print(key2);
-     while( key3 == NO_KEY )
-          { key3 = keypad.getKey();   }
-     lcd.print(key3);
-     while( key4 == NO_KEY )
-          { key4 = keypad.getKey();   }
-     lcd.print(key5);
-     while( key5 == NO_KEY )
-          { key5 = keypad.getKey();   }
-     lcd.print(key5);
-     ANNEALING_TIME = key*10000+key2*1000+key3*100+key4*10+key5;
-     lcd.clear(); 
+     first =  readVal(); 
+     second = readVal(); 
+     ANNEALING_TIME = key2*10000+first*100+second;
+     delay(2000);
+     lcd.clear();  
            
      // Select EXTENSION_TIME
      lcd.setCursor(0, 0);
      lcd.print("Insert extension "); 
      lcd.setCursor(0, 1);
-     lcd.print("time in ms"); 
-     while( key == NO_KEY )
-          { key = keypad.getKey();    }
-     lcd.print(key);
-     while( key2 == NO_KEY )
-          { key2 = keypad.getKey();    }
-     lcd.print(key2);
+     lcd.print("time in ms "); 
+     int key3 = keypad.getKey(); 
      while( key3 == NO_KEY )
           { key3 = keypad.getKey();    }
+     key3 = key3 -48;
      lcd.print(key3);
-     while( key4 == NO_KEY )
-          { key4 = keypad.getKey();    }
-     lcd.print(key5);
-     while( key5 == NO_KEY )
-          { key5 = keypad.getKey();    }
-     lcd.print(key5);
-     EXTENSION_TIME = key*10000+key2*1000+key3*100+key4*10+key5;
-     lcd.clear(); 
-             
+     first =  readVal(); 
+     second = readVal(); 
+     EXTENSION_TIME = key3*10000+first*100+second;
+     delay(2000);
+     lcd.clear();  
 }
 
 /* Print out current phase, temperature, how long it's been running, etc
 startTime -> when specific phase started running in ms
 */
 void printTempStats(unsigned long startTime) {
-  
+   lcd.clear();
    unsigned long timeElapsed = millis() - startTime;
+   lcd.setCursor(0, 0);
    lcd.print("CCL:");
    lcd.print(CURRENT_CYCLE);
    lcd.print(" PHS:");
    lcd.print(CURRENT_PHASE);
-   lcd.print(" ET:");
+   lcd.setCursor(0, 1);
+   lcd.print("ET:");
    lcd.print(timeElapsed);
-   lcd.print(" TT:");
-   lcd.print(millis());
+  // lcd.print(" TT:");
+ //  lcd.print(millis());
    lcd.print(" TMP:");
    lcd.println(curTemp);
 }
