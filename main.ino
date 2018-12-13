@@ -162,7 +162,7 @@ void customProgram() {
      lcd.print("Denature time"); 
      lcd.setCursor(0, 1);
      lcd.print("in ms "); 
-     int key =  keypad.getKey(); 
+     int key =  NO_KEY; 
      while( key == NO_KEY )
           { key = keypad.getKey();    }
      key = key -48;
@@ -177,15 +177,15 @@ void customProgram() {
      lcd.setCursor(0, 0);
      lcd.print("Insert annealing "); 
      lcd.setCursor(0, 1);
-     lcd.print("time in ms "); 
-     int key2 = keypad.getKey(); 
-     while( key2 == NO_KEY )
-          { key2 = keypad.getKey();    }
-     key2 = key2 -48;
-     lcd.print(key2);
+     lcd.print("time in ms ");  
+     key =  NO_KEY; 
+     while( key == NO_KEY )
+          { key = keypad.getKey();    }
+     key = key -48;
+     lcd.print(key);
      first =  readVal(); 
      second = readVal(); 
-     ANNEALING_TIME = key2*10000+first*100+second;
+     ANNEALING_TIME = key*10000+first*100+second;
      delay(2000);
      lcd.clear();  
            
@@ -194,14 +194,14 @@ void customProgram() {
      lcd.print("Insert extension "); 
      lcd.setCursor(0, 1);
      lcd.print("time in ms "); 
-     int key3 = keypad.getKey(); 
-     while( key3 == NO_KEY )
-          { key3 = keypad.getKey();    }
-     key3 = key3 -48;
-     lcd.print(key3);
+     key =  NO_KEY; 
+     while( key == NO_KEY )
+          { key = keypad.getKey();    }
+     key = key -48;
+     lcd.print(key);
      first =  readVal(); 
      second = readVal(); 
-     EXTENSION_TIME = key3*10000+first*100+second;
+     EXTENSION_TIME = key*10000+first*100+second;
      delay(2000);
      lcd.clear();  
 }
