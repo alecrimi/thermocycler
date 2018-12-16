@@ -48,7 +48,7 @@ unsigned int FINAL_EXTENSION_TIME = 600000;
 int NUM_CYCLES = 32;  
  
 /* Hardware variables */
-int heatPin = 13;//A5;//7;  // pin that controls the relay w resistors
+int heatPin =  A5;//7;  // pin that controls the relay w resistors
 
 // Thermocouple pins
 int thermoDO = A3;//4;
@@ -56,7 +56,7 @@ int thermoCS = A2;//5;
 int thermoCLK = A1;//6;
 MAX6675 thermocouple(thermoCLK, thermoCS, thermoDO);
 
-int fanPin = A4;//9; // pin for controling the fan
+int fanPin = 13;//A4;//9; // pin for controling the fan
  
 //safety vars
 short ROOM_TEMP = 18; // if initial temp is below this, we assume thermocouple is diconnected or not working
