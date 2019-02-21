@@ -1,16 +1,22 @@
-#include "max6675.h"
+ 
+#include <SPI.h>
+//#include "Adafruit_MAX31855.h"
 //#include <LiquidCrystal.h>
 #include <Wire.h> 
 #include <LiquidCrystal_I2C.h>
 #include <Keypad.h>
+#include <OneWire.h> 
+#include <DallasTemperature.h>
+#define ONE_WIRE_BUS A1 
+#define SENSOR_RESOLUTION 9
 
 /* Display and keyboard */
 // initialize the library by associating any needed LCD interface pin
 // with the arduino pin number it is connected to
 //const int rs = A0, en = 13, d4 = 12, d5 = 11, d6 = 10, d7 = 9;
 //LiquidCrystal lcd(rs, en, d4, d5, d6, d7);
-LiquidCrystal_I2C lcd(0x27, 2, 1, 0, 4, 5, 6, 7, 3, POSITIVE); // 
-
+//LiquidCrystal_I2C lcd(0x27, 2, 1, 0, 4, 5, 6, 7, 3, POSITIVE); // 
+LiquidCrystal_I2C lcd(0x27,16,2); 
 
 const byte ROWS = 4; //four rows
 const byte COLS = 3; //three columns
@@ -26,40 +32,48 @@ byte colPins[COLS] = {6, 5, 4}; //connect to the column pinouts of the keypad
 Keypad keypad = Keypad( makeKeymap(keys), rowPins, colPins, ROWS, COLS ); 
   
 int cycles = 0;
+int shift = 5;
+
+// Termostat object
+OneWire oneWire(ONE_WIRE_BUS); 
+// Pass our oneWire reference to Dallas Temperature. 
+DallasTemperature sensors(&oneWire);
+//DeviceAddress sensorDeviceAddress;
  
 /* PCR VARIABLES*/
-double DENATURE_TEMP = 94;
-double ANNEALING_TEMP = 60.00;
-double EXTENSION_TEMP = 72;
+double DENATURE_TEMP = 92;
+double ANNEALING_TEMP = 58.00;
+double EXTENSION_TEMP = 70;
 
 // Phase durations in ms. Suggested adding 3-5 seconds to
 // the recommended times because it takes a second or two
 // for the temps to stabilize
-unsigned int DENATURE_TIME = 33000;
-unsigned int ANNEALING_TIME= 33000;
-unsigned int EXTENSION_TIME = 35000;
+unsigned int DENATURE_TIME = 60000;
+unsigned int ANNEALING_TIME= 60000;
+unsigned int EXTENSION_TIME = 60000;
 
 // Most protocols suggest having a longer denature time during the first cycle
 // and a longer extension time for the final cycle.
-unsigned int INITIAL_DENATURE_TIME = 300000;
-unsigned int FINAL_EXTENSION_TIME = 600000;
+unsigned int INITIAL_DENATURE_TIME = 180000;
+unsigned int FINAL_EXTENSION_TIME = 360000;
 
 // how many cycles we should do. (most protocols recommend 32-35)
 int NUM_CYCLES = 32;  
  
 /* Hardware variables */
 int heatPin =  A5;//7;  // pin that controls the relay w resistors
-
+/*
 // Thermocouple pins
-int thermoDO = A3;//4;
-int thermoCS = A2;//5;
-int thermoCLK = A1;//6;
-MAX6675 thermocouple(thermoCLK, thermoCS, thermoDO);
-
+int MAXDO =   A0;
+int MAXCS  = A1;
+int MAXCLK = A2;
+// initialize the Thermocouple
+Adafruit_MAX31855 thermocouple(MAXCLK, MAXCS, MAXDO);
+*/
 int fanPin = 13;//A4;//9; // pin for controling the fan
  
 //safety vars
-short ROOM_TEMP = 18; // if initial temp is below this, we assume thermocouple is diconnected or not working
+short ROOM_TEMP = 10; // if initial temp is below this, we assume thermocouple is diconnected or not working
 short MAX_ALLOWED_TEMP = 100; // we never go above 100C
 double MAX_HEAT_INCREASE = 2.5; // we never increase the temp by more than 2.5 degrees per 650ms
 
@@ -213,17 +227,18 @@ void printTempStats(unsigned long startTime) {
    lcd.clear();
    unsigned long timeElapsed = millis() - startTime;
    lcd.setCursor(0, 0);
-   lcd.print("CCL:");
+   lcd.print("CCL: ");
    lcd.print(CURRENT_CYCLE);
-   lcd.print(" PHS:");
+   lcd.print(" PHS: ");
    lcd.print(CURRENT_PHASE);
    lcd.setCursor(0, 1);
-   lcd.print("ET:");
-   lcd.print(timeElapsed);
+   //lcd.print("ET:");
+  // lcd.print(timeElapsed);
   // lcd.print(" TT:");
  //  lcd.print(millis());
-   lcd.print(" TMP:");
+   lcd.print("TMP:  ");
    lcd.println(curTemp);
+   lcd.print("  ");
 }
 
 /* Heat up to the desired temperature.
@@ -232,23 +247,36 @@ printTemps -> whether or not we should print debug stats
 */
 boolean heatUp(double maxTemp, boolean printTemps = true){
   unsigned long startTime = millis(); 
-  double prevTemp = thermocouple.readCelsius();
-  curTemp = thermocouple.readCelsius();
+
+  sensors.requestTemperatures();  
+ // double prevTemp = thermocouple.readCelsius() - shift;
+ // curTemp = thermocouple.readCelsius() -shift;
+  double prevTemp = sensors.getTempCByIndex(0);
+  sensors.requestTemperatures(); 
+  curTemp = sensors.getTempCByIndex(0);
+ 
   if (curTemp < ROOM_TEMP) {
-   lcd.println("STARTING TMP TOO LOW");
+   lcd.clear();
+   lcd.setCursor(0, 0);
+   lcd.println("STARTING TMP");
+   lcd.setCursor(0, 1);
+   lcd.println("TOO LOW");
    lcd.println(prevTemp);
+   delay(2000);
    return false;
   }
   int curIteration = 0;
   
   while (curTemp < maxTemp) {
     curIteration++;
-    int pulseDuration = min(650, ((600*(maxTemp-curTemp))+80)); // as we approach desired temp, heat up slower
+    sensors.requestTemperatures(); 
+//    int pulseDuration = min(650, ((600*(maxTemp-curTemp))+80)); // as we approach desired temp, heat up slower
+    int pulseDuration = max(1000, ((950+(maxTemp-curTemp))+50)); // as we approach desired temp, heat up slower
     digitalWrite(heatPin, HIGH);
     delay(pulseDuration);
     digitalWrite(heatPin, LOW);
-    
-    curTemp=thermocouple.readCelsius();
+
+    curTemp=sensors.getTempCByIndex(0);// thermocouple.readCelsius() - shift;
     if(curTemp >= maxTemp)
        break;
     if(printTemps) {
@@ -262,8 +290,9 @@ boolean heatUp(double maxTemp, boolean printTemps = true){
      // iterations to make sure we're not overheating
       do  {
         prevTemp = curTemp;
-        delay(250); 
-        curTemp = thermocouple.readCelsius();
+        delay(15);//250 
+        sensors.requestTemperatures();
+        curTemp = sensors.getTempCByIndex(0); //thermocouple.readCelsius() - shift;
       }      while(curTemp > prevTemp);
     }
 
@@ -272,10 +301,12 @@ boolean heatUp(double maxTemp, boolean printTemps = true){
      
    if ((curIteration%2) == 0) {
     if(curTemp < (prevTemp-1.25)) {
+      lcd.setCursor(0, 0);
       lcd.print("Temperature is not increasing... ");
       lcd.print(curTemp);
       lcd.print("   ");
       lcd.println(prevTemp);
+      delay(2000);
       return false; 
     }
    } else {   
@@ -284,14 +315,17 @@ boolean heatUp(double maxTemp, boolean printTemps = true){
      
    while ((curTemp-prevTemp) >= MAX_HEAT_INCREASE) {
      prevTemp = curTemp;
+     lcd.setCursor(0, 0);
      lcd.print("HEATING UP TOO FAST! ");
      delay(1000);
-     curTemp = thermocouple.readCelsius();
+     sensors.requestTemperatures();
+     curTemp = sensors.getTempCByIndex(0); //thermocouple.readCelsius() -shift;
      lcd.println(curTemp);
    }
    
    while(curTemp >= MAX_ALLOWED_TEMP) {
-     delay(1000);
+     delay(2000);
+     lcd.setCursor(0, 0);
      lcd.print("OVERHEATING");
      lcd.println(curTemp);
    }
@@ -308,7 +342,9 @@ printTemps -> whether or not to print out stats
 */
 void coolDown(double minTemp, int maxTimeout = 300, boolean printTemps = true) {  
   unsigned long startTime = millis(); 
-  while ((curTemp = thermocouple.readCelsius()) > (minTemp+0.75)) {
+ // while ((curTemp = thermocouple.readCelsius() - shift) > (minTemp+0.75)) {
+
+   while ((curTemp =  sensors.getTempCByIndex(0) ) > (minTemp+0.75)) {
     // I've found that turning off the fan a bit before the minTemp is reached
     // is best (because fan blades continue to rotate even after fan is turned off.
     digitalWrite(fanPin, HIGH);
@@ -316,6 +352,7 @@ void coolDown(double minTemp, int maxTimeout = 300, boolean printTemps = true) {
        printTempStats(startTime);
      }
    delay(maxTimeout);
+   sensors.requestTemperatures();
    } 
    digitalWrite(fanPin, LOW);
 }
@@ -333,12 +370,13 @@ boolean holdConstantTemp(long duration, double idealTemp) {
   long timeElapsed = millis() - startTime;
   // keep track of how much time passed
   while (timeElapsed < duration) {
-    curTemp = thermocouple.readCelsius();
+    sensors.requestTemperatures();
+    curTemp = sensors.getTempCByIndex(0); //thermocouple.readCelsius() -shift;
     printTempStats(startTime);
       if(curTemp < idealTemp) {  
         // turn up the heat for 90ms if the temperature is cooler
         digitalWrite(heatPin, HIGH);
-        delay(90);
+        delay(350);
         digitalWrite(heatPin, LOW);
       } else if (curTemp > (idealTemp+0.5)) {
         // turn up the fan if the temp is too high
@@ -367,10 +405,12 @@ void runPCR() {
     time = millis();
     lcd.setCursor(0, 1);
     lcd.print("HEATING UP");
+    ;
     CURRENT_PHASE='H';
     if(!heatUp(DENATURE_TEMP)){
+      delay(2000);
       // if unable to heat up, stop
-      lcd.setCursor(0, 1);
+      lcd.setCursor(0, 0);
       lcd.print("Unable to heat up... something is wrong :(");
       cycles = NUM_CYCLES;
       break;
@@ -419,7 +459,7 @@ void runPCR() {
     lcd.setCursor(0, 0);
     lcd.print("HEATING UP");
     time =millis();
-    CURRENT_PHASE='D';
+    CURRENT_PHASE='H';
     heatUp((EXTENSION_TEMP));
     dif = millis()-time;
     lcd.setCursor(0, 1);
@@ -449,6 +489,7 @@ void runPCR() {
     lcd.print(millis()-cycleStartTime);
    // Serial.println();
 } 
+  delay(5000);
   lcd.setCursor(0, 1);
   lcd.print("DONE, Yaw loves you");
 }
@@ -456,9 +497,12 @@ void runPCR() {
 
 /* Set up all pins */
 void setup() {
-  
+
+ sensors.begin();  
+ sensors.setResolution( SENSOR_RESOLUTION); //sensorDeviceAddress,
  // set up the LCD's number of columns and rows:
- lcd.begin(16, 2);
+ //lcd.begin(16, 2);
+ lcd.init();
  lcd.backlight();//Power on the back light
  // Print a message to the LCD.
  //Serial.begin(9600);  
