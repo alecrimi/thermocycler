@@ -1,3 +1,3 @@
 # thermocycler
 It is done:
-[Screenshot](working.jpg)
+![Screenshot](working.jpg) 
