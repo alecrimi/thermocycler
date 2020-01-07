@@ -1,8 +1,6 @@
 #include <max6675.h>
 
 /* PCR code to cycle temperatures for denaturing, annealing and extending DNA.
-Stacey Kuznetsov (stace@cmu.edu) and Matt Mancuso (mcmancuso@gmail.com)
-July 2012
 
 
 *** All temperatures at in degrees Celcius.
